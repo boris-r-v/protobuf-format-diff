@@ -10,6 +10,7 @@ int main(int argc, char * argv[])
     {
         cerr << "Expected arguments: root-dir1 file1 root-dir2 file2 type [--binary]" << endl;
         cerr << "Use '.' for <type> to compare all messages and enums in given files." << endl;
+        cerr << "Forked from: https://github.com/jleben/protobuf-format-diff" << endl;        
         return 1;
     }
 

@@ -134,7 +134,8 @@ void print_field(const FieldDescriptor * field)
 
 void Comparison::Section::print(int level)
 {
-    cout << string(level*2, ' ') << message() << endl;
+    if (level)
+        cout << string(level*2, ' ') << message() << endl;
 
     ++level;
 
@@ -251,6 +252,20 @@ Comparison::Section * Comparison::compare(const EnumDescriptor * enum1, const En
     return &section;
 }
 
+namespace {
+    auto ProtoFieldDescriptorLabel2String = []( auto label){
+        switch (label){
+            case FieldDescriptor::Label::LABEL_OPTIONAL:
+                return "optional";
+            case FieldDescriptor::Label::LABEL_REQUIRED:
+                return "required";
+            case FieldDescriptor::Label::LABEL_REPEATED:
+                return "repeated";
+
+            }
+        return "";
+    };
+}
 Comparison::Section Comparison::compare(const FieldDescriptor * field1, const FieldDescriptor * field2)
 {
     Section section(Message_Field_Comparison, field1->name(), field2->name());
@@ -267,7 +282,7 @@ Comparison::Section Comparison::compare(const FieldDescriptor * field1, const Fi
 
     if (field1->label() != field2->label())
     {
-        section.add_item(Message_Field_Label_Changed, "", "");
+        section.add_item(Message_Field_Label_Changed, ProtoFieldDescriptorLabel2String(field1->label()), ProtoFieldDescriptorLabel2String(field2->label()) );
     }
 
     if (field1->type() != field2->type())

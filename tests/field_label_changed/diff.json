@@ -10,8 +10,8 @@
       "b": "f2",
       "items": [{
         "type": "message_field_label_changed",
-        "a": "",
-        "b": ""
+        "a": "optional",
+        "b": "required"
       }]
     }]
   }]
