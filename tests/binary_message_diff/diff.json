@@ -6,12 +6,12 @@
     "b": "Test.M",
     "items": [{
       "type": "message_field_removed",
-      "a": "1",
-      "b": ""
+      "a": "'optional float f1 = 1;'",
+      "b": "null"
     },{
       "type": "message_field_added",
-      "a": "",
-      "b": "3"
+      "a": "null",
+      "b": "'optional float f3 = 3;'"
     }],
     "sections": [{
       "type": "message_field_comparison",

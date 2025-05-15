@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include <format>
 
 using namespace std;
 
@@ -253,7 +254,7 @@ Comparison::Section * Comparison::compare(const EnumDescriptor * enum1, const En
 }
 
 namespace {
-    auto ProtoFieldDescriptorLabel2String = []( auto label){
+    auto PFDL2String = []( auto label){
         switch (label){
             case FieldDescriptor::Label::LABEL_OPTIONAL:
                 return "optional";
@@ -282,7 +283,7 @@ Comparison::Section Comparison::compare(const FieldDescriptor * field1, const Fi
 
     if (field1->label() != field2->label())
     {
-        section.add_item(Message_Field_Label_Changed, ProtoFieldDescriptorLabel2String(field1->label()), ProtoFieldDescriptorLabel2String(field2->label()) );
+        section.add_item(Message_Field_Label_Changed, PFDL2String(field1->label()), PFDL2String(field2->label()) );
     }
 
     if (field1->type() != field2->type())
@@ -352,8 +353,8 @@ Comparison::Section * Comparison::compare(const Descriptor * desc1, const Descri
         }
         else
         {
-            string field1_id = options.binary ? to_string(field1->number()) : field1->name();
-            section.add_item(Message_Field_Removed, field1_id, "");
+            string field1_id = std::format("'{} {} {} = {};'", PFDL2String(field1->label()), field1->type_name(), field1->name(),field1->number() );
+            section.add_item(Message_Field_Removed, field1_id, "null");
         }
     }
 
@@ -366,8 +367,9 @@ Comparison::Section * Comparison::compare(const Descriptor * desc1, const Descri
 
         if (!field1)
         {
-            string field2_id = options.binary ? to_string(field2->number()) : field2->name();
-            section.add_item(Message_Field_Added, "", field2_id);
+
+            string field2_id = std::format("'{} {} {} = {};'", PFDL2String(field2->label()), field2->type_name(), field2->name(),field2->number() );
+            section.add_item(Message_Field_Added, "null", field2_id);
         }
     }
 

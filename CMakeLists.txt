@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.10)
 project(protobuf-spec-comparator)
 
+set(CMAKE_CXX_STANDARD 23)
+include_directories(".")
+
 find_package(Protobuf CONFIG REQUIRED)
 set ( Protobuf_USE_STATIC_LIBS ON )
 if ( Protobuf_FOUND )

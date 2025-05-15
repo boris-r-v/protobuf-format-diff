@@ -1,24 +1,27 @@
-#include "comparison.h"
-
+#include <comparison.h>
 #include <iostream>
+#include <filesystem>
 
 using namespace std;
+namespace fs = std::filesystem;
 
 int main(int argc, char * argv[])
 {
-    if (argc < 6)
+    if (argc < 4)
     {
-        cerr << "Expected arguments: root-dir1 file1 root-dir2 file2 type [--binary]" << endl;
-        cerr << "Use '.' for <type> to compare all messages and enums in given files." << endl;
-        cerr << "Forked from: https://github.com/jleben/protobuf-format-diff" << endl;        
-        return 1;
+        cerr << endl << "Usage: "<< argv[0] << " path2file1 path2file2 type [--binary]" << endl;
+        cerr << "\tUse '.' for <type> to compare all messages and enums in given files." << endl;
+        cerr << "\tUse '--binary' to see field number instead of it name" << endl;
+        cerr << "\ttype is protobuf message or enum name with package if it exists: e.g. cls_gen.CounterInfo not CounterInfo" << endl;
+        cerr << "\tForked from: https://github.com/jleben/protobuf-format-diff" << endl;        
+        return 0;
     }
 
     Comparison::Options options;
 
-    if (argc > 6)
+    if (argc > 4)
     {
-        for (int i = 6; i < argc; ++i)
+        for (int i = 4; i < argc; ++i)
         {
             string arg = argv[i];
             if (arg == "--binary")
@@ -34,12 +37,15 @@ int main(int argc, char * argv[])
     }
 
     Comparison comparison(options);
-
+   
     try
     {
-        Source source1(argv[2], argv[1]);
-        Source source2(argv[4], argv[3]);
-        string message_name = argv[5];
+        fs::path file1(argv[1]);
+        fs::path file2(argv[2]);
+        string message_name = argv[3];
+
+        Source source1( file1.filename(), file1.parent_path() );
+        Source source2( file2.filename(), file2.parent_path() );
         if (message_name == ".")
             comparison.compare(source1, source2);
         else

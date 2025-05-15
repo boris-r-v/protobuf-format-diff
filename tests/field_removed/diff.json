@@ -6,8 +6,8 @@
     "b": "Test.M",
     "items": [{
       "type": "message_field_removed",
-      "a": "f",
-      "b": ""
+      "a": "'optional float f = 1;'",
+      "b": "null"
     }]
   }]
 }
