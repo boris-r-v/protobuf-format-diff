@@ -8,8 +8,8 @@
       "items": [
         {
           "type": "enum_value_added",
-          "a": "",
-          "b": "V2"
+          "a": "null",
+          "b": "'V2 = 2;'"
         }
       ]
     }

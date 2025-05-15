@@ -11,7 +11,7 @@ int main(int argc, char * argv[])
     {
         cerr << endl << "Usage: "<< argv[0] << " path2file1 path2file2 type [--binary]" << endl;
         cerr << "\tUse '.' for <type> to compare all messages and enums in given files." << endl;
-        cerr << "\tUse '--binary' to see field number instead of it name" << endl;
+        cerr << "\tUse '--binary' to search field by number not by name" << endl;
         cerr << "\ttype is protobuf message or enum name with package if it exists: e.g. cls_gen.CounterInfo not CounterInfo" << endl;
         cerr << "\tForked from: https://github.com/jleben/protobuf-format-diff" << endl;        
         return 0;

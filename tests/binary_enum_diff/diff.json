@@ -6,12 +6,12 @@
     "b": "Test.E",
     "items": [{
       "type": "enum_value_removed",
-      "a": "1",
-      "b": ""
+      "a": "'v1 = 1;'",
+      "b": "null"
     },{
       "type": "enum_value_added",
-      "a": "",
-      "b": "3"
+      "a": "null",
+      "b": "'v3 = 3;'"
     }],
     "sections": [{
       "type": "enum_value_comparison",

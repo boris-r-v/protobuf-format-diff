@@ -231,8 +231,8 @@ Comparison::Section * Comparison::compare(const EnumDescriptor * enum1, const En
         }
         else
         {
-            string value1_id = options.binary ? to_string(value1->number()) : value1->name();
-            section.add_item(Enum_Value_Removed, value1_id, "");
+            string value1_id = std::format("'{} = {};'", value1->name(), value1->number() );
+            section.add_item(Enum_Value_Removed, value1_id, "null");
         }
     }
 
@@ -245,8 +245,8 @@ Comparison::Section * Comparison::compare(const EnumDescriptor * enum1, const En
 
         if (!value1)
         {
-            string value2_id = options.binary ? to_string(value2->number()) : value2->name();
-            section.add_item(Enum_Value_Added, "", value2_id);
+            string value2_id = std::format("'{} = {};'", value2->name(), value2->number() );
+            section.add_item(Enum_Value_Added, "null", value2_id);
         }
     }
 

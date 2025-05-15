@@ -19,8 +19,8 @@
     "a": "Test.E",
     "b": "Test.E",
     "items": [
-      { "type": "enum_value_removed", "a": "V1", "b": ""},
-      { "type": "enum_value_added",   "a": "", "b": "V2"}
+      { "type": "enum_value_removed", "a": "'V1 = 1;'", "b": "null"},
+      { "type": "enum_value_added",   "a": "null", "b": "'V2 = 2;'"}
     ]
   }]
 }
