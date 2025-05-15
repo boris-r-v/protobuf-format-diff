@@ -45,6 +45,7 @@ public:
     Source() {}
     Source(const string & file_path, const string & root_dir)
     {
+        source_tree.MapPath("google/protobuf", "/data/geo/cls-libs-docker/libs/include/google/protobuf");
         source_tree.MapPath("", root_dir);
 
         ErrorCollector error_collector;

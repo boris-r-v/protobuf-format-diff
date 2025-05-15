@@ -1,6 +1,6 @@
 
 add_executable(run-tests test.cpp ../comparison.cpp)
-target_link_libraries(run-tests protoc protobuf)
+target_link_libraries(run-tests protobuf::libprotobuf)
 
 function(add_comparison_test_w_options dir_name options)
   message(STATUS "Adding test ${dir_name} ${options}")
