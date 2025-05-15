@@ -10,10 +10,12 @@ int main(int argc, char * argv[])
     if (argc < 4)
     {
         cerr << endl << "Usage: "<< argv[0] << " path2file1 path2file2 type [--binary]" << endl;
-        cerr << "\tUse '.' for <type> to compare all messages and enums in given files." << endl;
-        cerr << "\tUse '--binary' to search field by number not by name" << endl;
-        cerr << "\ttype is protobuf message or enum name with package if it exists: e.g. cls_gen.CounterInfo not CounterInfo" << endl;
-        cerr << "\tForked from: https://github.com/jleben/protobuf-format-diff" << endl;        
+        cerr << "\t - <type> is protobuf message or enum name, with package (if it exists): e.g.: cls_gen.CounterInfo where <cls_gen> is package name" << endl;
+        cerr << "\t - use '.' for <type> to compare all messages and enums in given files." << endl;
+        cerr << "\t - use '--binary' to search field by number not by name" << endl;
+        cerr << "\t - forked from: https://github.com/jleben/protobuf-format-diff" << endl;        
+
+        cerr << "E.g.: ./protobuf-spec-compare ../proto/CLS.proto ../proto/CLS1.proto cls_gen.CounterAttributes" << endl << endl;        
         return 0;
     }
 
@@ -25,7 +27,7 @@ int main(int argc, char * argv[])
         {
             string arg = argv[i];
             if (arg == "--binary")
-            {
+            {   
                 options.binary = true;
             }
             else
@@ -54,12 +56,14 @@ int main(int argc, char * argv[])
     catch(std::exception & e)
     {
         cerr << e.what() << endl;
-        return 1;
+        return 2;
     }
 
     comparison.root.trim();
-    comparison.root.print();
+    std::stringstream ss;
+    comparison.root.print(ss);
+    cout << ss.str();
 
-    return 0;
+    return ss.str().empty() ? 0 : 1;
 }
 

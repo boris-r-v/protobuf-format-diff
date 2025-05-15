@@ -133,10 +133,10 @@ void print_field(const FieldDescriptor * field)
     }
 }
 
-void Comparison::Section::print(int level)
+void Comparison::Section::print(std::stringstream& ss, int level)
 {
     if (level)
-        cout << string(level*2, ' ') << message() << endl;
+        ss << string(level*2, ' ') << message() << endl;
 
     ++level;
 
@@ -144,17 +144,17 @@ void Comparison::Section::print(int level)
 
     for (auto & note : notes)
     {
-        cout << subprefix << note << endl;
+        ss << subprefix << note << endl;
     }
 
     for (auto & item : items)
     {
-        cout << subprefix << "* " << item.message() << endl;
+        ss << subprefix << "* " << item.message() << endl;
     }
 
     for (auto & subsection : subsections)
     {
-        subsection.print(level);
+        subsection.print(ss, level);
     }
 }
 

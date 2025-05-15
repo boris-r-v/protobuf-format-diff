@@ -189,8 +189,8 @@ int main(int argc, char * argv[])
     }
 
     comparison.root.trim();
-
-    comparison.root.print();
+    std::stringstream ss;
+    comparison.root.print(ss);
 
     json expected;
 

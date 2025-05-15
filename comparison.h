@@ -151,8 +151,8 @@ public:
         }
 
         string message() const;
-
-        void print(int level = 0);
+        
+        void print(std::stringstream& ss, int level = 0);
     };
 
     struct Options
