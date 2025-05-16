@@ -1,0 +1,64 @@
+{
+  "cases": [
+    {
+      "name":"---1---",
+      "cmd_line": "./protobuf-spec-compare -f1 ../proto/CLS.proto -f2 ../proto/CLS1.proto -n  -s cls_gen.CounterAttributes -i /data/geo/cls-libs-docker/libs/include",
+      "cmd_parse_result":"success",
+      "map":{ 
+        "-f1": "../proto/CLS.proto",
+        "-f2": "../proto/CLS1.proto",
+        "-n": "set",
+        "-s": "cls_gen.CounterAttributes",
+        "-i": "/data/geo/cls-libs-docker/libs/include"
+      }
+    },
+    {
+      "name":"---2---",
+      "cmd_line": "./protobuf-spec-compare -f1 ../proto/CLS.proto2 -f2 ../proto/CLS1.proto2 -n  -i /data/geo/cls-libs-docker/libs/include",
+      "cmd_parse_result":"success",
+      "map":{ 
+        "-f1": "../proto/CLS.proto2" ,
+        "-f2": "../proto/CLS1.proto2",
+        "-n":"set",
+        "-s": "",
+        "-i": "/data/geo/cls-libs-docker/libs/include"
+      }
+    },
+    {
+      "name":"---3---",      
+      "cmd_line": "./protobuf-spec-compare -f1 ../proto/CLS.proto3 -f2 ../proto/CLS1.proto3 -i /data/geo/cls-libs-docker/libs/include -n",
+      "cmd_parse_result":"success",      
+      "map":{
+        "-f1": "../proto/CLS.proto3",
+        "-f2": "../proto/CLS1.proto3",
+        "-n":"set",
+        "-s": "",
+        "-i": "/data/geo/cls-libs-docker/libs/include"
+      }
+    },
+    {
+      "name":"---4---",
+      "cmd_line": "./protobuf-spec-compare -f1 ../proto/CLS.proto4 -f2 ../proto/CLS1.proto4 -i -n",
+      "cmd_parse_result":"fail",      
+      "map":{
+        "-f1": "../proto/CLS.proto4",
+        "-f2": "../proto/CLS1.proto4",
+        "-n":"",
+        "-s": "",
+        "-i": "-n"
+      }
+    },
+    {
+      "name":"---5---",
+      "cmd_line": "./protobuf-spec-compare -f1 ../proto/CLS.proto5 -f2 ../proto/CLS1.proto5 -i /some/path",
+      "cmd_parse_result":"success",      
+      "map":{
+        "-f1": "../proto/CLS.proto5",
+        "-f2": "../proto/CLS1.proto5",
+        "-n": "",
+        "-s": "",
+        "-i": "/some/path"
+      }
+    }
+  ]
+}

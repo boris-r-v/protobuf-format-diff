@@ -1,44 +1,43 @@
 #include <comparison.h>
 #include <iostream>
 #include <filesystem>
+#include <program_option.h>
 
 using namespace std;
 namespace fs = std::filesystem;
 string proto_include;
+
 int main(int argc, char * argv[])
 {
-    if (argc < 4)
-    {
-        cerr << endl << "Usage: "<< argv[0] << " path2file1 path2file2 type [use_field_number] [proto_include]" << endl;
-        cerr << "\t - <type> is protobuf message or enum name, with package (if it exists): e.g.: cls_gen.CounterInfo where <cls_gen> is package name" << endl;
-        cerr << "\t - use '.' for <type> to compare all messages and enums in given files." << endl;
-        cerr << "\t - use 'use_field_number' to search field by number not by name" << endl;
-        cerr << "\t - use 'proto_include' to set protobuf include path with common files (e.g.: descriptor.proto) e.g.: /data/geo/cls-libs-docker/libs/include" << endl;
-        cerr << "\t - forked from: https://github.com/jleben/protobuf-format-diff" << endl;        
+    program_option po;
+    using po_t = program_option::opt_value_type;
 
-        cerr << "E.g.: ./protobuf-spec-compare ../proto/CLS.proto ../proto/CLS1.proto cls_gen.CounterAttributes /data/geo/cls-libs-docker/libs/include" << endl << endl;        
+    po.add( "-f1", "path to base proto file", po_t::param, po_t::mandatory );
+    po.add( "-f2", "path to comparing proto file", po_t::param, po_t::mandatory );
+    po.add( "-n", "use number of fields to fetch it from protobuf scheme, instead of name of field", po_t::allown );
+    po.add( "-s", "message or enum name to compare with package name, if skipped - will be comparing whole proto file", po_t::param );
+    po.add( "-i", "path to protobuf include folder", po_t::param );
+    po.add( "-h", "print usage help and exit", po_t::allown );
+
+    try{
+        po.parse(argc, argv);
+    }
+    catch(std::exception const& e){
+        cerr << "Error: " << e.what() << endl;
+        cerr << "Usage: " <<  argv[0] <<" -f1 path2file1 -f2 path2file2 [-s ...] [-i ...] [-n] " << endl;
+        po.help( cerr );
+        return 1;
+    }
+
+    if ( po.get("-h").is_set() ){
+        cerr << "Usage: " <<  argv[0] <<" -f1 path2file1 -f2 path2file2 [-s ...] [-i ...] [-n] " << endl;
+        po.help( cerr );
         return 0;
     }
-
     Comparison::Options options;
-
-    if (argc > 4)
-    {
-        for (int i = 4; i < argc; ++i)
-        {
-            string arg = argv[i];
-            if (arg == "use_field_number")
-            {   
-                options.binary = true;
-            }
-            else
-            {
-                proto_include = arg;
-            }
-        }
-    }
-
+    options.binary = po.get("-n").is_set();
     Comparison comparison(options);
+    proto_include = po.get("-i").value;    
    
     try
     {

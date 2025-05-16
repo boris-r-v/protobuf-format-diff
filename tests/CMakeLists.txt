@@ -13,6 +13,27 @@ function(add_comparison_test dir_name)
   add_comparison_test_w_options("${dir_name}" "")
 endfunction()
 
+find_package(Boost REQUIRED COMPONENTS program_options)
+IF(Boost_FOUND)
+  INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
+  LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
+ENDIF(Boost_FOUND)
+#message(STATUS "Boost include dir: ${Boost_INCLUDE_DIRS} ")
+#message(STATUS "Boost library dir: ${Boost_LIBRARY_DIRS} ")
+#message(STATUS "Link with folowing boost libs: ${Boost_LIBRARIES} ")
+
+add_executable(run-po-tests test-op.cpp )
+target_link_libraries(run-po-tests ${Boost_LIBRARIES} )
+
+function(add_program_option_test dir_name)
+  message(STATUS "Adding program option test ${dir_name}")
+  add_test(NAME "${dir_name}" COMMAND
+          run-po-tests "${dir_name}"
+          WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
+endfunction()
+
+
+
 add_comparison_test(msg_added)
 add_comparison_test(msg_removed)
 add_comparison_test(enum_added)
@@ -33,3 +54,4 @@ add_comparison_test(field_enum_type_changed)
 add_comparison_test(msg_recursion)
 add_comparison_test_w_options(binary_message_diff use_field_number)
 add_comparison_test_w_options(binary_enum_diff use_field_number)
+add_program_option_test(program_option)
