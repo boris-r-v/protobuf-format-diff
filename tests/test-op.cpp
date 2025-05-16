@@ -57,6 +57,7 @@ void verify( json & expected)
         std::string cmd_parse_result = one["cmd_parse_result"];
         try{
             po.parse( argc, argv );
+            po.check();
         }
         catch(std::exception const& e ){
                 std::cerr << "Exception: " << e.what() << std::endl;

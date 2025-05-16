@@ -18,11 +18,26 @@ int main(int argc, char * argv[])
     po.add( "-s", "message or enum name to compare with package name, if skipped - will be comparing whole proto file", po_t::param );
     po.add( "-i", "path to protobuf include folder", po_t::param );
     po.add( "-h", "print usage help and exit", po_t::allown );
+    po.add( "-o", "show program option set before run", po_t::allown );
 
-    try{
+    try
+    {
         po.parse(argc, argv);
+        if ( po.get("-h").is_set() )
+        {
+            cerr << "Usage: " << argv[0] <<" -f1 path2file1 -f2 path2file2 [-s ...] [-i ...] [-n] " << endl;
+            po.help( cerr );
+            cerr << "E.g.:" << argv[0] <<" -f1 ../proto/CLS1.proto -f2 ../proto/CLS.proto -i /data/tools/protoc/include -s cls_gen.CounterAttributes " << endl;
+            return 0;
+        }
+        po.check();
+        if ( po.get("-o").is_set() )
+        {
+            po.show(cout);
+        }
     }
-    catch(std::exception const& e){
+    catch(std::exception const& e)
+    {
         cerr << "Error: " << e.what() << endl;
         cerr << "Usage: " <<  argv[0] <<" -f1 path2file1 -f2 path2file2 [-s ...] [-i ...] [-n] " << endl;
         po.help( cerr );
@@ -30,12 +45,7 @@ int main(int argc, char * argv[])
         return 1;
     }
 
-    if ( po.get("-h").is_set() ){
-        cerr << "Usage: " << argv[0] <<" -f1 path2file1 -f2 path2file2 [-s ...] [-i ...] [-n] " << endl;
-        po.help( cerr );
-        cerr << "E.g.:" << argv[0] <<" -f1 ../proto/CLS1.proto -f2 ../proto/CLS.proto -i /data/tools/protoc/include -s cls_gen.CounterAttributes " << endl;
-        return 0;
-    }
+   
     Comparison::Options options;
     options.binary = po.get("-n").is_set();
     Comparison comparison(options);

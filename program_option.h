@@ -1,4 +1,4 @@
-#include <unordered_map>
+#include <map>
 #include <string>
 #include <format>
 #include <iostream>
@@ -26,26 +26,37 @@ class program_option{
                 if ( auto fnd = opt_.find(argv[i]); fnd != opt_.end() ){
                     if ( fnd->second.type == opt_value_type::param and (i+1) < argc ){
                         fnd->second.value = argv[++i];
-                        if ( opt_.find(fnd->second.value) != opt_.end() )
-                            throw std::runtime_error(std::format( "Missing argument for key<{}> in command line string, read value <{}>", fnd->first, fnd->second.value ) );
+                        if ( opt_.find(fnd->second.value) != opt_.end() ){
+                            throw std::runtime_error(std::format( "Missing argument for key '{}' in command line string, read value '{}'", fnd->first, fnd->second.value ) );
+                        }
                     }
                     if (fnd->second.type == opt_value_type::allown){
                         fnd->second.value = "set";
                     }
                 }
-            }
-            for (auto& it: opt_){
-                if ( opt_value_type::mandatory == it.second.mtype and !it.second.is_set() ){
-                    throw std::runtime_error(std::format( "Skipped mandatory cmd-line param <{}>", it.first ) );
+                else{
+                    throw std::runtime_error(std::format( "Unknown param '{}' in command line", argv[i]) );
                 }
-                std::cout << "\t" << it.first << " : " << it.second.value << "\n";
             }
         }
-
+        template<class T>
+        void show(T& ss ){
+            ss << " Command line params: \n";
+            for (auto& it: opt_){
+                ss << "\t" << it.first << " : " << it.second.value << "\n";
+            }
+            ss << " ------------------- \n";
+        }
+        void check(){
+            for (auto& it: opt_){
+                if ( opt_value_type::mandatory == it.second.mtype and !it.second.is_set() ){
+                    throw std::runtime_error(std::format( "Skipped mandatory cmd-line param '{}'", it.first ) );
+                }
+            }
+        }
         auto const& get( std::string const& key){
             return opt_.at(key);
         }
-
         void erase(){
             for (auto& it: opt_ ){
                 it.second.value="";
@@ -58,6 +69,6 @@ class program_option{
             }
         }
     private:
-        std::unordered_map<std::string, opt_value_t> opt_;
+        std::map<std::string, opt_value_t> opt_;
 
 };
