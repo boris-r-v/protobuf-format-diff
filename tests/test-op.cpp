@@ -17,6 +17,13 @@ void confirm(bool value, const string & what)
         throw std::runtime_error(what);
 }
 
+template<class T>
+struct erase_guard{
+    T& obj;
+    erase_guard(T& o) :obj(o){}
+    ~erase_guard(){ obj.erase();}
+};
+
 void verify( json & expected)
 {
     using po_t = program_option::opt_value_type;
@@ -24,13 +31,14 @@ void verify( json & expected)
     confirm( cases.is_array(), "\"cases\" json-field is the array");
     program_option po;
 
-    po.add( "-f1", "path to base proto file", po_t::param );
-    po.add( "-f2", "path to second proto file", po_t::param );
+    po.add( "-f1", "path to base proto file", po_t::param, po_t::mandatory );
+    po.add( "-f2", "path to second proto file", po_t::param, po_t::mandatory );
     po.add( "-n", "if set will be using number of fields instad of name", po_t::allown );
     po.add( "-s", "message or enum name to compare with package name, if skipped - will be comparing whole proto file", po_t::param );
     po.add( "-i","path to protobuf include folder", po_t::param );
 
     for (auto& one: cases ){
+        erase_guard<program_option> eg(po);
         std::string test_name = one["name"];
         std::cout <<"*****************  test_name: \""<< test_name << "\"  *****************"<< std::endl;
         confirm( one["map"].is_object(), "\"map\" json-field is the object");
@@ -51,18 +59,16 @@ void verify( json & expected)
             po.parse( argc, argv );
         }
         catch(std::exception const& e ){
-            std::cerr << "Exception: " << e.what() << std::endl;
-            confirm( cmd_parse_result == "fail" , "Test mark as fail while parse command line");
+                std::cerr << "Exception: " << e.what() << std::endl;
+            confirm( cmd_parse_result == "fail" , std::format( "parse test cmd-line fail, but marked in test.json as <{}>", cmd_parse_result ) );
             continue;
         }
-        confirm( cmd_parse_result == "success" , "test mark as success while parse command line");
+        confirm( cmd_parse_result == "success" , std::format( "parse test cmd-line success, but marked in test.json as <{}>", cmd_parse_result ));
 
         for (auto& [key, value] : one["map"].items() ){
             string val = po.get(key).value;
             confirm( val == value, std::format("param {}:'{}' equal to '{}'", string(key), val, string(value) ) );
         }
-        po.erase();
-        std::cout <<"**********************************"<< std::endl;
     }
 }
 int main(int argc, char * argv[])

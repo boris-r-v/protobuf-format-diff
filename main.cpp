@@ -14,7 +14,7 @@ int main(int argc, char * argv[])
 
     po.add( "-f1", "path to base proto file", po_t::param, po_t::mandatory );
     po.add( "-f2", "path to comparing proto file", po_t::param, po_t::mandatory );
-    po.add( "-n", "use number of fields to fetch it from protobuf scheme, instead of name of field", po_t::allown );
+    po.add( "-n", "use number of fields to fetch it from protobuf scheme, instead of field name", po_t::allown );
     po.add( "-s", "message or enum name to compare with package name, if skipped - will be comparing whole proto file", po_t::param );
     po.add( "-i", "path to protobuf include folder", po_t::param );
     po.add( "-h", "print usage help and exit", po_t::allown );
@@ -26,12 +26,14 @@ int main(int argc, char * argv[])
         cerr << "Error: " << e.what() << endl;
         cerr << "Usage: " <<  argv[0] <<" -f1 path2file1 -f2 path2file2 [-s ...] [-i ...] [-n] " << endl;
         po.help( cerr );
+        cerr << "E.g.:" << argv[0] <<" -f1 ../proto/CLS1.proto -f2 ../proto/CLS.proto -i /data/tools/protoc/include -s cls_gen.CounterAttributes " << endl;
         return 1;
     }
 
     if ( po.get("-h").is_set() ){
-        cerr << "Usage: " <<  argv[0] <<" -f1 path2file1 -f2 path2file2 [-s ...] [-i ...] [-n] " << endl;
+        cerr << "Usage: " << argv[0] <<" -f1 path2file1 -f2 path2file2 [-s ...] [-i ...] [-n] " << endl;
         po.help( cerr );
+        cerr << "E.g.:" << argv[0] <<" -f1 ../proto/CLS1.proto -f2 ../proto/CLS.proto -i /data/tools/protoc/include -s cls_gen.CounterAttributes " << endl;
         return 0;
     }
     Comparison::Options options;
@@ -41,9 +43,9 @@ int main(int argc, char * argv[])
    
     try
     {
-        fs::path file1(argv[1]);
-        fs::path file2(argv[2]);
-        string message_name = argv[3];
+        fs::path file1(po.get("-f1").value);
+        fs::path file2(po.get("-f2").value);
+        string message_name = po.get("-s").is_set() ? po.get("-s").value : ".";
 
         Source source1( file1.filename(), file1.parent_path() );
         Source source2( file2.filename(), file2.parent_path() );

@@ -1,6 +1,7 @@
 #include <unordered_map>
 #include <string>
 #include <format>
+#include <iostream>
 
 
 class program_option{
@@ -34,8 +35,10 @@ class program_option{
                 }
             }
             for (auto& it: opt_){
-                if (it.second.is_set() and it.second.mtype == opt_value_type::mandatory )
+                if ( opt_value_type::mandatory == it.second.mtype and !it.second.is_set() ){
                     throw std::runtime_error(std::format( "Skipped mandatory cmd-line param <{}>", it.first ) );
+                }
+                std::cout << "\t" << it.first << " : " << it.second.value << "\n";
             }
         }
 
