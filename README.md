@@ -55,3 +55,10 @@ Enum values are matched by name (a binary comparison mode will be added where va
 
 Values present in file1 and missing in file2 are reported as removed, and vice-versa for added fields.
 Any changes in maching enum values are reported.
+
+
+### Static Linking
+Check if glibc-static is installed
+
+    g++ -static -std=c++23 -static-libstdc++ -static-libgcc -I. -I /data/geo/cls-libs-docker/libs/include  main.cpp comparison.cpp -o proto_st  -Wl,-Bstatic -L/data/geo/cls-libs-docker/libs/lib64 -lprotobuf 
+
