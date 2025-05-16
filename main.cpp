@@ -4,18 +4,19 @@
 
 using namespace std;
 namespace fs = std::filesystem;
-
+string proto_include;
 int main(int argc, char * argv[])
 {
     if (argc < 4)
     {
-        cerr << endl << "Usage: "<< argv[0] << " path2file1 path2file2 type [--binary]" << endl;
+        cerr << endl << "Usage: "<< argv[0] << " path2file1 path2file2 type [use_field_number] [proto_include]" << endl;
         cerr << "\t - <type> is protobuf message or enum name, with package (if it exists): e.g.: cls_gen.CounterInfo where <cls_gen> is package name" << endl;
         cerr << "\t - use '.' for <type> to compare all messages and enums in given files." << endl;
-        cerr << "\t - use '--binary' to search field by number not by name" << endl;
+        cerr << "\t - use 'use_field_number' to search field by number not by name" << endl;
+        cerr << "\t - use 'proto_include' to set protobuf include path with common files (e.g.: descriptor.proto) e.g.: /data/geo/cls-libs-docker/libs/include" << endl;
         cerr << "\t - forked from: https://github.com/jleben/protobuf-format-diff" << endl;        
 
-        cerr << "E.g.: ./protobuf-spec-compare ../proto/CLS.proto ../proto/CLS1.proto cls_gen.CounterAttributes" << endl << endl;        
+        cerr << "E.g.: ./protobuf-spec-compare ../proto/CLS.proto ../proto/CLS1.proto cls_gen.CounterAttributes /data/geo/cls-libs-docker/libs/include" << endl << endl;        
         return 0;
     }
 
@@ -26,14 +27,13 @@ int main(int argc, char * argv[])
         for (int i = 4; i < argc; ++i)
         {
             string arg = argv[i];
-            if (arg == "--binary")
+            if (arg == "use_field_number")
             {   
                 options.binary = true;
             }
             else
             {
-                cerr << "Unknown option: " << arg << endl;
-                return 1;
+                proto_include = arg;
             }
         }
     }

@@ -144,12 +144,12 @@ void verify(const Comparison & comparison, json & expected)
 {
     verify(comparison.root, expected);
 }
-
+string proto_include;
 int main(int argc, char * argv[])
 {
     if (argc < 2)
     {
-        cerr << "Expected argument: <test directory>" << endl;
+        cerr << "Expected argument: <test directory> [use_field_number]" << endl;
         return 1;
     }
 
@@ -162,7 +162,7 @@ int main(int argc, char * argv[])
         for (int i = 2; i < argc; ++i)
         {
             string arg = argv[i];
-            if (arg == "--binary")
+            if (arg == "use_field_number")
             {
                 options.binary = true;
             }

@@ -33,7 +33,7 @@ public:
         cerr << "Warning: " << filename << "@" << line << "," << column << ": " << message << endl;
     }
 };
-
+extern string proto_include;
 class Source
 {
     using DiskSourceTree = google::protobuf::compiler::DiskSourceTree;
@@ -45,7 +45,11 @@ public:
     Source() {}
     Source(const string & file_path, const string & root_dir)
     {
-        source_tree.MapPath("google/protobuf", "/data/geo/cls-libs-docker/libs/include/google/protobuf");
+        if ( !proto_include.empty() )
+        {
+            //source_tree.MapPath("google/protobuf", proto_include+"/google/protobuf" );
+            source_tree.MapPath("", proto_include );
+        }
         source_tree.MapPath("", root_dir);
 
         ErrorCollector error_collector;
