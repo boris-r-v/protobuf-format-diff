@@ -9,14 +9,10 @@ include_directories(".")
 
 
 find_package(Protobuf CONFIG REQUIRED)
-set ( Protobuf_USE_STATIC_LIBS ON )
+
 if ( Protobuf_FOUND )
     message( STATUS "Protobuf version : ${Protobuf_VERSION}" )
     message( STATUS "Protobuf include path : ${Protobuf_INCLUDE_DIRS}" )
-    message( STATUS "Protobuf libraries : ${Protobuf_LIBRARIES}" )
-    message( STATUS "Protobuf compiler libraries : ${Protobuf_PROTOC_LIBRARIES}")
-    message( STATUS "Protobuf lite libraries : ${Protobuf_LITE_LIBRARIES}")
-    message( STATUS "Protobuf use static : ${Protobuf_USE_STATIC_LIBS}" )
 else()
     message( WARNING "Protobuf package not found -> specify search path via PROTOBUF_ROOT variable")
 endif()
@@ -26,6 +22,7 @@ add_subdirectory(tests)
 
 if ( STATIC )
     message( WARNING "Using statis linking check if glibc-static is installed" )
+    set ( Protobuf_USE_STATIC_LIBS ON )
     set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
     set(BUILD_SHARED_LIBS OFF)
     set(CMAKE_EXE_LINKER_FLAGS "-static")
